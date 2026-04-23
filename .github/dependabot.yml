@@ -13,8 +13,10 @@ updates:
     open-pull-requests-limit: 3
     labels: ['dependencies', 'github-actions', 'security']
     commit-message:
+      # Keep the full conventional-commits prefix here (e.g. "chore(deps)").
+      # Do NOT also set `include: 'scope'` — dependabot would then emit
+      # `chore(deps)(deps): ...` and commitlint would reject it.
       prefix: 'chore(deps)'
-      include: 'scope'
     groups:
       all-actions:
         patterns: ['*']
