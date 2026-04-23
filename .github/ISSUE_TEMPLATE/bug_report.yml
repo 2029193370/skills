@@ -1,0 +1,57 @@
+name: Bug report
+description: Report a problem with the reusable workflow or the starter template.
+labels: ['bug', 'triage']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug.
+        **Do not file security vulnerabilities here** - please use the
+        [private security advisory flow](../security/advisories/new) instead.
+  - type: input
+    id: version
+    attributes:
+      label: Template version / commit SHA
+      description: "Which tag or SHA are you using (e.g. v1.0.0, main@52ebdec)?"
+      placeholder: 'v1.0.0'
+    validations:
+      required: true
+  - type: dropdown
+    id: stack
+    attributes:
+      label: Language / stack
+      options:
+        - Node.js / TypeScript
+        - Java (Maven)
+        - Java (Gradle)
+        - PHP
+        - Python
+        - Go
+        - .NET
+        - Docker
+        - Not language-specific
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description + link to a failing CI run if possible.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproducer
+      description: Link to a repo / branch that reproduces the issue.
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      render: shell

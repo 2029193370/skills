@@ -1,0 +1,16 @@
+# CODEOWNERS
+# Every PR touching these paths automatically requests review from the listed owners.
+# Matches the last rule wins - order matters.
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-security/customizing-your-repository/about-code-owners
+
+# Default owner for everything in the repo
+*                                   @2029193370
+
+# CI / security workflows require extra scrutiny
+/.github/workflows/                 @2029193370
+/.github/dependabot.yml             @2029193370
+/.github/CODEOWNERS                 @2029193370
+/SECURITY.md                        @2029193370
+
+# Starter template consumed by downstream repos
+/starter/                           @2029193370

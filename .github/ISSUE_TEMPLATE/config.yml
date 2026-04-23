@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/2029193370/ci-templates/security/advisories/new
+    about: Please use GitHub's private advisory flow for any security-related report.
+  - name: Ask a question / discuss
+    url: https://github.com/2029193370/ci-templates/discussions
+    about: General questions, ideas and usage help.

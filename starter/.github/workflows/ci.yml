@@ -1,0 +1,38 @@
+name: CI & Security Scan
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    # Pin at the sliding major tag so you receive compatible updates automatically.
+    # Pin at an exact tag (e.g. @v2.0.0) if you need fully reproducible builds.
+    uses: 2029193370/ci-templates/.github/workflows/reusable-ci.yml@v2
+    # Uncomment what you need. Every input is optional and auto-defaults.
+    # with:
+    #   node-version: '22'
+    #   node-versions: '["20","22"]'   # matrix test (overrides node-version)
+    #   java-version: '21'
+    #   php-version: '8.3'
+    #   python-version: '3.12'
+    #   python-versions: '["3.11","3.12"]'
+    #   go-version: '1.23'
+    #   dotnet-version: '8.0'
+    #   trivy-severity: 'CRITICAL,HIGH'
+    #   trivy-exit-code: '1'
+    #   enable-checkov: true           # IaC scan (Terraform/K8s/Dockerfile)
+    #   enable-license-scan: false     # REUSE SPDX compliance scan
+    #   harden-runner-policy: 'audit'  # 'block' for strict egress
+    # secrets:
+    #   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

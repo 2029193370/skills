@@ -1,0 +1,20 @@
+# Conventional Commits config consumed by commitlint
+# See: https://github.com/conventional-changelog/commitlint/blob/master/%40commitlint/config-conventional/index.js
+extends: ['@commitlint/config-conventional']
+rules:
+  type-enum:
+    - 2
+    - always
+    - - feat
+      - fix
+      - docs
+      - refactor
+      - perf
+      - test
+      - build
+      - ci
+      - chore
+      - revert
+      - security
+  header-max-length: [2, always, 100]
+  subject-case: [0]

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "simple",
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "include-component-in-tag": false,
+      "include-v-in-tag": true,
+      "changelog-sections": [
+        { "type": "feat",     "section": "Features" },
+        { "type": "fix",      "section": "Bug Fixes" },
+        { "type": "security", "section": "Security" },
+        { "type": "perf",     "section": "Performance" },
+        { "type": "refactor", "section": "Refactor" },
+        { "type": "ci",       "section": "CI" },
+        { "type": "build",    "section": "Build" },
+        { "type": "docs",     "section": "Documentation", "hidden": false },
+        { "type": "chore",    "section": "Chore", "hidden": true },
+        { "type": "test",     "section": "Tests", "hidden": true }
+      ]
+    }
+  }
+}

@@ -1,0 +1,11 @@
+# zizmor configuration (auto-discovered from .github/zizmor.yml)
+# Docs: https://docs.zizmor.sh/configuration/
+
+rules:
+  unpinned-uses:
+    # The starter workflow is intentionally NOT SHA-pinned: downstream users
+    # must be able to read and edit it without resolving commit hashes. They
+    # receive updates via the sliding major tag (e.g. @v2). Internal workflows
+    # ARE pinned and ARE audited by zizmor.
+    ignore:
+      - ci.yml

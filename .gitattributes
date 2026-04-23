@@ -1,0 +1,29 @@
+# Default: let Git auto-detect text files
+* text=auto eol=lf
+
+# Force LF for files that are executed/parsed in Linux CI
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.sh        text eol=lf
+*.json      text eol=lf
+*.toml      text eol=lf
+*.md        text eol=lf
+Dockerfile  text eol=lf
+.gitignore  text eol=lf
+.gitattributes text eol=lf
+.yamllint   text eol=lf
+
+# Keep CRLF for Windows-only scripts
+*.bat       text eol=crlf
+*.cmd       text eol=crlf
+*.ps1       text eol=crlf
+
+# Binary files (no line-ending conversion)
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.ico       binary
+*.pdf       binary
+*.zip       binary
+*.tar.gz    binary

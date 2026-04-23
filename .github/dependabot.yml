@@ -1,0 +1,93 @@
+version: 2
+updates:
+  # ----------------------------------------------------------
+  # GitHub Actions (root) - keep SHAs fresh, merge every change
+  # into ONE PR per week to avoid notification spam.
+  # starter/ is intentionally NOT tracked: it uses human-readable
+  # @v2 tags so downstream users can read/edit it directly.
+  # ----------------------------------------------------------
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '03:00'
+      timezone: 'Asia/Shanghai'
+    open-pull-requests-limit: 3
+    labels: ['dependencies', 'github-actions', 'security']
+    commit-message:
+      prefix: 'chore(deps)'
+      include: 'scope'
+    groups:
+      # Single PR for all action updates (major / minor / patch).
+      # Major upgrades to Actions pinned by SHA are low-risk because
+      # we read the diff ourselves before merging.
+      all-actions:
+        patterns: ['*']
+        update-types: ['major', 'minor', 'patch']
+
+  # ----------------------------------------------------------
+  # Application-language ecosystems. The template repo itself has
+  # no package.json / requirements.txt etc., so these entries are
+  # inherited by forks/consumers who add real manifests. Limits are
+  # kept low to avoid PR spam.
+  # ----------------------------------------------------------
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule: { interval: 'weekly', day: 'monday' }
+    open-pull-requests-limit: 3
+    labels: ['dependencies', 'npm']
+    commit-message: { prefix: 'chore(deps)' }
+    groups:
+      npm-all:
+        patterns: ['*']
+        update-types: ['minor', 'patch']
+
+  - package-ecosystem: 'composer'
+    directory: '/'
+    schedule: { interval: 'weekly', day: 'monday' }
+    open-pull-requests-limit: 3
+    labels: ['dependencies', 'php']
+    commit-message: { prefix: 'chore(deps)' }
+
+  - package-ecosystem: 'pip'
+    directory: '/'
+    schedule: { interval: 'weekly', day: 'monday' }
+    open-pull-requests-limit: 3
+    labels: ['dependencies', 'python']
+    commit-message: { prefix: 'chore(deps)' }
+
+  - package-ecosystem: 'maven'
+    directory: '/'
+    schedule: { interval: 'weekly', day: 'monday' }
+    open-pull-requests-limit: 3
+    labels: ['dependencies', 'java']
+    commit-message: { prefix: 'chore(deps)' }
+
+  - package-ecosystem: 'gradle'
+    directory: '/'
+    schedule: { interval: 'weekly', day: 'monday' }
+    open-pull-requests-limit: 3
+    labels: ['dependencies', 'java']
+    commit-message: { prefix: 'chore(deps)' }
+
+  - package-ecosystem: 'gomod'
+    directory: '/'
+    schedule: { interval: 'weekly', day: 'monday' }
+    open-pull-requests-limit: 3
+    labels: ['dependencies', 'go']
+    commit-message: { prefix: 'chore(deps)' }
+
+  - package-ecosystem: 'nuget'
+    directory: '/'
+    schedule: { interval: 'weekly', day: 'monday' }
+    open-pull-requests-limit: 3
+    labels: ['dependencies', 'dotnet']
+    commit-message: { prefix: 'chore(deps)' }
+
+  - package-ecosystem: 'docker'
+    directory: '/'
+    schedule: { interval: 'weekly', day: 'monday' }
+    open-pull-requests-limit: 3
+    labels: ['dependencies', 'docker']
+    commit-message: { prefix: 'chore(deps)' }
