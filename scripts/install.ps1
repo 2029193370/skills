@@ -151,6 +151,22 @@ function Get-SelectedAgents {
   return @($Agent)
 }
 
+# ----- tar extraction (Windows-safe) ----------------------------------------
+# Prefer Windows' bundled bsdtar (System32\tar.exe) which understands drive
+# letters. Fall back to whatever tar is on PATH (Git Bash ships a busybox
+# tar that treats C:\ as a host:path spec and breaks).
+function Expand-Tar($tarPath, $destDir) {
+  $exe = 'tar'
+  if ($env:SystemRoot) {
+    $systemTar = Join-Path $env:SystemRoot 'System32\tar.exe'
+    if (Test-Path -LiteralPath $systemTar) { $exe = $systemTar }
+  }
+  & $exe -xzf $tarPath -C $destDir
+  if ($LASTEXITCODE -ne 0) {
+    throw "tar extraction failed for $tarPath (exit $LASTEXITCODE)"
+  }
+}
+
 # ----- registry -------------------------------------------------------------
 function Fetch-Registry {
   $script:TmpRoot = Join-Path ([IO.Path]::GetTempPath()) ("skills-" + [guid]::NewGuid().ToString('N'))
@@ -168,7 +184,7 @@ function Fetch-Registry {
     $tarUrl = "https://codeload.github.com/$Repo/tar.gz/$Ref"
     $tarPath = Join-Path $script:TmpRoot 'snapshot.tar.gz'
     Invoke-WebRequest -UseBasicParsing -Uri $tarUrl -OutFile $tarPath
-    tar -xzf $tarPath -C $script:TmpRoot
+    Expand-Tar $tarPath $script:TmpRoot
     Remove-Item -Force $tarPath
     $script:MirrorRoot = (Get-ChildItem -Directory $script:TmpRoot | Select-Object -First 1).FullName
     return (Join-Path $script:MirrorRoot 'registry.json')

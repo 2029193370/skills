@@ -35,6 +35,8 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
+          fetch-depth: 0
+          fetch-tags: true
           # Token persistence is required here to push the sliding major tag.
           persist-credentials: true
 
@@ -46,6 +48,8 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Make sure the tag that release-please just pushed is visible locally.
+          git fetch --tags --force origin "refs/tags/${TAG}:refs/tags/${TAG}"
           echo "Moving sliding tag v${MAJOR} -> ${TAG}"
           git tag -f "v${MAJOR}" "${TAG}"
           git push -f origin "v${MAJOR}"
