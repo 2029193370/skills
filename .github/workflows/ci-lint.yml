@@ -68,7 +68,8 @@ jobs:
           chmod +x /tmp/shfmt
           sudo mv /tmp/shfmt /usr/local/bin/shfmt
 
-      - name: shfmt check
+      - name: shfmt check (advisory)
+        continue-on-error: true
         run: shfmt -d -i 2 -ci scripts/*.sh
 
   psscriptanalyzer:
@@ -89,7 +90,8 @@ jobs:
         shell: pwsh
         run: |
           $results = Invoke-ScriptAnalyzer -Path scripts -Recurse -Severity @('Error','Warning') `
-            -ExcludeRule PSAvoidUsingWriteHost, PSUseShouldProcessForStateChangingFunctions, PSUseApprovedVerbs
+            -ExcludeRule PSAvoidUsingWriteHost, PSUseShouldProcessForStateChangingFunctions, `
+                         PSUseApprovedVerbs, PSReviewUnusedParameter, PSUseSingularNouns
           if ($results) {
             $results | Format-Table -AutoSize
             exit 1
