@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/2029193370/skills/compare/v1.0.0...v1.0.1) (2026-04-23)
+
+
+### Bug Fixes
+
+* **windows:** use Windows-bundled bsdtar for offline snapshot extraction ([032fcf7](https://github.com/2029193370/skills/commit/032fcf73dab3b185b74c797cc4a8a7e0b96ce729))
+
 ## 1.0.0 (2026-04-23)
 
 
