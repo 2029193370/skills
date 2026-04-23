@@ -289,7 +289,9 @@ function Record-Manifest($dir, $name, $installed) {
           [void]$entries.Add([pscustomobject]@{ name = $e.name; path = $e.path; ts = $e.ts; ref = $e.ref })
         }
       }
-    } catch {}
+    } catch {
+      Write-Warn2 "manifest $file is unreadable, rewriting: $_"
+    }
   }
   [void]$entries.Add([pscustomobject]@{
     name = $name

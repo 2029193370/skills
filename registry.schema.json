@@ -7,6 +7,10 @@
   "required": ["version", "skills"],
   "additionalProperties": false,
   "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Reference to the schema URL; ignored at runtime but kept for editor tooling."
+    },
     "version": {
       "type": "string",
       "description": "Registry schema version (semver).",

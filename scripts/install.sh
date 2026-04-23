@@ -393,8 +393,10 @@ do_install() {
     done <<< "$skills"
   done <<< "$agents"
 
+  if [ "$DRY_RUN" -eq 1 ]; then
+    info "(dry-run: no files were written)"
+  fi
   ok "done"
-  [ "$DRY_RUN" -eq 1 ] && info "(dry-run: no files were written)"
 }
 
 do_uninstall() {

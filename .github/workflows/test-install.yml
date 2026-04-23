@@ -1,4 +1,4 @@
-name: test-install
+﻿name: test-install
 
 on:
   pull_request:
@@ -44,20 +44,20 @@ jobs:
       - name: Dry-run (online, all agents, list action)
         env:
           SKILLS_INSTALLER_REPO: ${{ github.repository }}
-          SKILLS_INSTALLER_REF:  ${{ github.head_ref || github.ref_name }}
+          SKILLS_INSTALLER_REF: ${{ github.head_ref || github.ref_name }}
         run: bash scripts/install.sh --list --agent=cursor --scope=global
 
       - name: Dry-run (online, install MIT subset, dry-run)
         env:
           SKILLS_INSTALLER_REPO: ${{ github.repository }}
-          SKILLS_INSTALLER_REF:  ${{ github.head_ref || github.ref_name }}
+          SKILLS_INSTALLER_REF: ${{ github.head_ref || github.ref_name }}
         run: bash scripts/install.sh --dry-run --agent=cursor --skills=find-skills,superpowers,ui-ux-pro-max
 
       - name: Install offline MIT subset to tmp Cursor dir
         env:
           HOME: ${{ runner.temp }}/agent-home
           SKILLS_INSTALLER_REPO: ${{ github.repository }}
-          SKILLS_INSTALLER_REF:  ${{ github.head_ref || github.ref_name }}
+          SKILLS_INSTALLER_REF: ${{ github.head_ref || github.ref_name }}
         run: |
           mkdir -p "$HOME/.cursor"
           bash scripts/install.sh --offline --yes \
@@ -92,25 +92,25 @@ jobs:
         shell: pwsh
         env:
           SKILLS_INSTALLER_REPO: ${{ github.repository }}
-          SKILLS_INSTALLER_REF:  ${{ github.head_ref || github.ref_name }}
+          SKILLS_INSTALLER_REF: ${{ github.head_ref || github.ref_name }}
         run: .\scripts\install.ps1 -Action list -Agent cursor -Scope global
 
       - name: Dry-run (offline MIT subset)
         shell: pwsh
         env:
           SKILLS_INSTALLER_REPO: ${{ github.repository }}
-          SKILLS_INSTALLER_REF:  ${{ github.head_ref || github.ref_name }}
-        run: .\scripts\install.ps1 -DryRun -Offline -Agent cursor -Skills find-skills,superpowers,ui-ux-pro-max
+          SKILLS_INSTALLER_REF: ${{ github.head_ref || github.ref_name }}
+        run: .\scripts\install.ps1 -DryRun -Offline -Agent cursor -Skills 'find-skills,superpowers,ui-ux-pro-max'
 
       - name: Install offline MIT subset
         shell: pwsh
         env:
           USERPROFILE: ${{ runner.temp }}\agent-home
           SKILLS_INSTALLER_REPO: ${{ github.repository }}
-          SKILLS_INSTALLER_REF:  ${{ github.head_ref || github.ref_name }}
+          SKILLS_INSTALLER_REF: ${{ github.head_ref || github.ref_name }}
         run: |
           New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.cursor" | Out-Null
-          .\scripts\install.ps1 -Offline -Yes -Agent cursor -Skills find-skills,superpowers,ui-ux-pro-max
+          .\scripts\install.ps1 -Offline -Yes -Agent cursor -Skills 'find-skills,superpowers,ui-ux-pro-max'
           if (-not (Test-Path "$env:USERPROFILE\.cursor\skills\find-skills\SKILL.md")) { throw "find-skills missing" }
           if (-not (Test-Path "$env:USERPROFILE\.cursor\skills\ui-ux-pro-max\SKILL.md")) { throw "ui-ux-pro-max missing" }
           if (-not (Test-Path "$env:USERPROFILE\.cursor\skills\superpowers")) { throw "superpowers missing" }

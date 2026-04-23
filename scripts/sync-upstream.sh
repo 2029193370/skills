@@ -24,13 +24,15 @@ FILTER="${1:-}"
 py() { python3 "$@"; }
 
 # Emit one line per redistributable skill: name|upstream|branch|path1 path2...
-py - "$REG" "$FILTER" <<'PY'
+py - "$REG" "$FILTER" > /tmp/skills-sync.list <<'PY'
 import json, sys
 reg = json.load(open(sys.argv[1], encoding="utf-8"))
 flt = sys.argv[2]
 for s in reg["skills"]:
-    if not s.get("redistributable", True): continue
-    if flt and s["name"] != flt: continue
+    if not s.get("redistributable", True):
+        continue
+    if flt and s["name"] != flt:
+        continue
     print("|".join([
         s["name"],
         s["upstream"],
@@ -39,7 +41,6 @@ for s in reg["skills"]:
         "1" if s.get("flatten", False) else "0",
     ]))
 PY
-} > /tmp/skills-sync.list
 
 if [ ! -s /tmp/skills-sync.list ]; then
   echo "nothing to sync (check registry.json and filter '$FILTER')"
