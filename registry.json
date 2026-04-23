@@ -1,0 +1,79 @@
+{
+  "$schema": "./registry.schema.json",
+  "version": "1.0.0",
+  "skills": [
+    {
+      "name": "document-skills",
+      "title": "Document Skills (Excel / Word / PDF / PPT)",
+      "description": "Read, create and transform .xlsx, .docx, .pdf and .pptx files end-to-end.",
+      "upstream": "https://github.com/anthropics/skills",
+      "branch": "main",
+      "license": "Source-available",
+      "redistributable": false,
+      "paths": [
+        "skills/xlsx",
+        "skills/docx",
+        "skills/pdf",
+        "skills/pptx"
+      ],
+      "installAs": "document-skills",
+      "tags": ["document", "office", "anthropic"]
+    },
+    {
+      "name": "frontend-design",
+      "title": "Frontend Design",
+      "description": "Production-grade frontend interfaces with distinctive visual direction.",
+      "upstream": "https://github.com/anthropics/skills",
+      "branch": "main",
+      "license": "Source-available",
+      "redistributable": false,
+      "paths": ["skills/frontend-design"],
+      "tags": ["design", "frontend", "anthropic"]
+    },
+    {
+      "name": "skill-creator",
+      "title": "Skill Creator",
+      "description": "Anthropic's official toolkit for authoring, evaluating and iterating on skills.",
+      "upstream": "https://github.com/anthropics/skills",
+      "branch": "main",
+      "license": "Source-available",
+      "redistributable": false,
+      "paths": ["skills/skill-creator"],
+      "tags": ["meta", "authoring", "anthropic"]
+    },
+    {
+      "name": "ui-ux-pro-max",
+      "title": "UI UX Pro Max",
+      "description": "Design intelligence for professional UI/UX: 57 styles, 95 palettes, 56 font pairings, 98 UX guidelines.",
+      "upstream": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+      "branch": "main",
+      "license": "MIT",
+      "redistributable": true,
+      "paths": ["."],
+      "tags": ["design", "ui"]
+    },
+    {
+      "name": "find-skills",
+      "title": "Find Skills",
+      "description": "Discover and install more agent skills when the user says \"is there a skill that...\".",
+      "upstream": "https://github.com/aqianer/find-skills",
+      "branch": "main",
+      "license": "MIT",
+      "redistributable": true,
+      "paths": ["skills/find-skills"],
+      "tags": ["meta", "discovery"]
+    },
+    {
+      "name": "superpowers",
+      "title": "Superpowers",
+      "description": "Agentic software development methodology: brainstorming, plan writing, TDD, subagent dispatch and 30+ meta-skills.",
+      "upstream": "https://github.com/obra/superpowers-skills",
+      "branch": "main",
+      "license": "MIT",
+      "redistributable": true,
+      "paths": ["skills"],
+      "flatten": true,
+      "tags": ["methodology", "framework"]
+    }
+  ]
+}

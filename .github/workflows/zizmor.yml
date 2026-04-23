@@ -3,10 +3,10 @@ name: zizmor (Actions SAST)
 on:
   push:
     branches: ['main']
-    paths: ['.github/workflows/**', 'starter/.github/workflows/**']
+    paths: ['.github/workflows/**']
   pull_request:
     branches: ['main']
-    paths: ['.github/workflows/**', 'starter/.github/workflows/**']
+    paths: ['.github/workflows/**']
   schedule:
     - cron: '0 4 * * 1'
   workflow_dispatch:
@@ -45,10 +45,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          zizmor --format sarif \
-            .github/workflows \
-            starter/.github/workflows \
-            > results.sarif || true
+          zizmor --format sarif .github/workflows > results.sarif || true
 
       - name: Upload SARIF to code scanning
         uses: github/codeql-action/upload-sarif@95e58e9a2cdfd71adc6e0353d5c52f41a045d225 # v4.35.2

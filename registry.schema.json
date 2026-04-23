@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/2029193370/skills/main/registry.schema.json",
+  "title": "skills-installer registry",
+  "description": "Declarative list of skills that skills-installer can fetch and install into agent skill directories.",
+  "type": "object",
+  "required": ["version", "skills"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Registry schema version (semver).",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "skills": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/Skill" }
+    }
+  },
+  "$defs": {
+    "Skill": {
+      "type": "object",
+      "required": ["name", "upstream", "paths"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,63}$",
+          "description": "Lowercase kebab-case identifier used both as the directory name inside the target skills dir and as the CLI selector for --skills=<name>."
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable title shown in install summary and README tables."
+        },
+        "description": {
+          "type": "string",
+          "description": "One-sentence elevator pitch."
+        },
+        "upstream": {
+          "type": "string",
+          "format": "uri",
+          "description": "HTTPS GitHub URL of the upstream repository to clone from in online mode."
+        },
+        "branch": {
+          "type": "string",
+          "default": "main",
+          "description": "Branch or tag to pull. Defaults to main."
+        },
+        "license": {
+          "type": "string",
+          "description": "Short license identifier, e.g. 'MIT', 'Apache-2.0', 'Source-available'."
+        },
+        "redistributable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the skill's license allows us to mirror it inside this repo for --offline mode. If false, --offline will skip this skill with a warning and prompt the user to re-run online."
+        },
+        "paths": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "description": "Subpaths inside the upstream repo to copy. '.' means the entire repo. Multiple paths produce sibling directories under the target when installAs is unset, or siblings under installAs when set."
+        },
+        "installAs": {
+          "type": "string",
+          "description": "Optional parent directory name under the agent's skills dir. When set, every entry in paths lands under <skills>/<installAs>/<basename(path)>. When unset, each entry lands directly at <skills>/<basename(path)>."
+        },
+        "flatten": {
+          "type": "boolean",
+          "default": false,
+          "description": "When true, the copy step promotes every immediate subdirectory of the given path to top-level (used by superpowers which groups skills into architecture/, collaboration/, … categories)."
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Free-form tags (document, design, meta, …) used by interactive menu filtering."
+        }
+      }
+    }
+  }
+}

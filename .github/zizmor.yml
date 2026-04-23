@@ -1,11 +1,8 @@
 # zizmor configuration (auto-discovered from .github/zizmor.yml)
 # Docs: https://docs.zizmor.sh/configuration/
+#
+# skills-installer has no unpinned workflows: every third-party action is
+# SHA-pinned with a trailing comment that documents the human-readable tag,
+# and Dependabot keeps those SHAs fresh.
 
-rules:
-  unpinned-uses:
-    # The starter workflow is intentionally NOT SHA-pinned: downstream users
-    # must be able to read and edit it without resolving commit hashes. They
-    # receive updates via the sliding major tag (e.g. @v2). Internal workflows
-    # ARE pinned and ARE audited by zizmor.
-    ignore:
-      - ci.yml
+rules: {}

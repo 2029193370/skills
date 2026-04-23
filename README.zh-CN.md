@@ -1,541 +1,244 @@
 <div align="center">
 
-# ci-templates
+# skills-installer
 
-**面向 Node.js / Java / PHP / Python / Go / .NET / Docker 项目的企业级可复用 GitHub Actions 工作流。**
-
-下游仓库只需约 10 行的 `ci.yml`，即可获得完整的 CI/CD 流水线：仓库卫生检查、七语言 Lint / Build / Test / Coverage、四层供应链安全。**一次维护，全部下游自动受益。**
+**一条命令，一次到位，把 6 个主流 agent skills 全局安装到 Cursor / Claude Code / Codex / Windsurf。**
 
 <br />
 
-[![CI - YAML Lint](https://github.com/2029193370/ci-templates/actions/workflows/ci-lint.yml/badge.svg)](https://github.com/2029193370/ci-templates/actions/workflows/ci-lint.yml)
-[![CodeQL](https://github.com/2029193370/ci-templates/actions/workflows/codeql.yml/badge.svg)](https://github.com/2029193370/ci-templates/actions/workflows/codeql.yml)
-[![zizmor](https://github.com/2029193370/ci-templates/actions/workflows/zizmor.yml/badge.svg)](https://github.com/2029193370/ci-templates/actions/workflows/zizmor.yml)
-[![Gitleaks](https://github.com/2029193370/ci-templates/actions/workflows/gitleaks.yml/badge.svg)](https://github.com/2029193370/ci-templates/actions/workflows/gitleaks.yml)
-[![Scorecard](https://github.com/2029193370/ci-templates/actions/workflows/scorecard.yml/badge.svg)](https://github.com/2029193370/ci-templates/actions/workflows/scorecard.yml)
-[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/2029193370/ci-templates/badge)](https://scorecard.dev/viewer/?uri=github.com/2029193370/ci-templates)
+[![CI](https://github.com/2029193370/skills/actions/workflows/ci-lint.yml/badge.svg)](https://github.com/2029193370/skills/actions/workflows/ci-lint.yml)
+[![CodeQL](https://github.com/2029193370/skills/actions/workflows/codeql.yml/badge.svg)](https://github.com/2029193370/skills/actions/workflows/codeql.yml)
+[![zizmor](https://github.com/2029193370/skills/actions/workflows/zizmor.yml/badge.svg)](https://github.com/2029193370/skills/actions/workflows/zizmor.yml)
+[![Gitleaks](https://github.com/2029193370/skills/actions/workflows/gitleaks.yml/badge.svg)](https://github.com/2029193370/skills/actions/workflows/gitleaks.yml)
+[![Scorecard](https://github.com/2029193370/skills/actions/workflows/scorecard.yml/badge.svg)](https://github.com/2029193370/skills/actions/workflows/scorecard.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![Release](https://img.shields.io/github/v/release/2029193370/ci-templates?include_prereleases&sort=semver)](https://github.com/2029193370/ci-templates/releases)
 
 [English](./README.md) &nbsp;|&nbsp; **简体中文**
 
-[30 秒接入](#30-秒接入) &nbsp;·&nbsp; [快速开始](#快速开始) &nbsp;·&nbsp; [特性](#特性) &nbsp;·&nbsp; [配置](#配置) &nbsp;·&nbsp; [安全模型](#安全模型) &nbsp;·&nbsp; [常见问题](#常见问题) &nbsp;·&nbsp; [贡献指南](./CONTRIBUTING.md) &nbsp;·&nbsp; [行为准则](./CODE_OF_CONDUCT.md)
+[快速开始](#快速开始) &nbsp;·&nbsp; [内置 skills](#内置-skills) &nbsp;·&nbsp; [目标 agent](#支持的-agent) &nbsp;·&nbsp; [命令行参考](#命令行参考) &nbsp;·&nbsp; [FAQ](#faq)
 
 </div>
 
 ---
 
-## 30 秒接入
-
-三种方式任选其一，效果相同：在你的仓库里生成一份 `.github/workflows/ci.yml`，自动继承全部企业级流水线。
-
-### 方式 A &nbsp; 一行命令安装（推荐）
-
-请在**你项目的根目录**（即包含 `.git` 的目录）下执行。
-
-**macOS / Linux / WSL / Git Bash**
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/2029193370/ci-templates/main/scripts/install.sh | bash
-```
-
-**Windows PowerShell**
-
-```powershell
-iwr -useb https://raw.githubusercontent.com/2029193370/ci-templates/main/scripts/install.ps1 | iex
-```
-
-安装脚本会创建 `.github/workflows/ci.yml`，并打印三条提交命令。遇到以下情况会安全退出：
-
-- 当前目录不是 git 仓库；
-- `ci.yml` 已存在（会先询问是否覆盖，传入 `CI_TEMPLATES_FORCE=1` 可跳过询问）。
-
-如果你需要**完全可复现**的构建，可以把安装脚本本身也钉到某个发布 tag，而不是 `main`：
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/2029193370/ci-templates/v2.0.0/scripts/install.sh | bash
-```
-
-> **安全说明**：你可以（也应该）在执行前先阅读脚本内容：
-> [`scripts/install.sh`](./scripts/install.sh) · [`scripts/install.ps1`](./scripts/install.ps1)。
-> 脚本只做一件事——把一份 YAML 文件下载到你的仓库里。不需要 sudo，不启动后台任务，不包含任何遥测。
-
-### 方式 B &nbsp; 点击 "Use this template" 按钮
-
-在仓库页面点击 **[Use this template](https://github.com/2029193370/ci-templates/generate)**（或直接用该链接），即可基于本模板**创建一个全新仓库**，已经预先包含 starter 结构。适合从零开始新建项目时使用。
-
-### 方式 C &nbsp; 手动复制（3 行）
-
-在你的仓库里创建 `.github/workflows/ci.yml`，写入以下内容然后 push：
-
-```yaml
-name: CI & Security Scan
-on: { push: { branches: [main] }, pull_request: { branches: [main] } }
-permissions: { contents: read }
-jobs:
-  ci:
-    uses: 2029193370/ci-templates/.github/workflows/reusable-ci.yml@v2
-```
-
-就这样——**8 行代码**换一条完整的企业级流水线。如需带完整输入注释的 starter 文件，见 [`starter/.github/workflows/ci.yml`](./starter/.github/workflows/ci.yml)。
-
-### 接入之后会发生什么？
-
-1. 你的**首次 push / pull request** 会触发 3 层流水线（仓库卫生 → 多语言 lint+build+test → 4 层安全）。
-2. 你项目**没有使用的语言**，对应的 Job 会秒级跳过。
-3. 本仓库每发布一个 `@v2.*` 版本，**你的仓库会在下一次 CI 触发时自动采用**——不会产生 PR，也不会收到邮件。
-
-想开启矩阵测试或自定义输入？请看 [配置 →](#配置)。
-
----
-
-## 目录
-
-- [项目动机](#项目动机)
-- [特性](#特性)
-- [架构](#架构)
-- [30 秒接入](#30-秒接入)
-- [快速开始](#快速开始)
-- [支持的技术栈](#支持的技术栈)
-- [配置](#配置)
-  - [输入参数](#输入参数)
-  - [密钥](#密钥)
-  - [多版本矩阵测试](#多版本矩阵测试)
-- [安全模型](#安全模型)
-- [版本与升级策略](#版本与升级策略)
-- [升级如何传达到下游仓库](#升级如何传达到下游仓库)
-- [工作流清单](#工作流清单)
-- [常见问题](#常见问题)
-- [版本迁移](#版本迁移)
-- [贡献指南](#贡献指南)
-- [安全策略](#安全策略)
-- [许可协议](#许可协议)
-- [致谢](#致谢)
-
----
-
-## 项目动机
-
-许多团队在多个仓库之间复制粘贴相同的 `ci.yml`，时间一长各仓库版本漂移，安全基线参差不齐。`ci-templates` 通过发布**一份**可复用工作流解决这个问题：
-
-- **一次维护，整体受益。** 任何使用 `@v2` 滑动标签的下游仓库，在其下一次 CI 触发时自动接收更新 —— 无 PR、无邮件、无需人工操作。
-- **企业级默认配置开箱即用。** SHA 固定的 Actions、运行时出站防火墙、完整历史密钥扫描、OpenSSF Scorecard 行业评分、基于 Conventional Commits 的自动发版。
-- **多语言无感知。** 自动检测七种技术栈，不相关的作业自动跳过。Node / Python 内置多版本矩阵测试。
-- **默认安全，按需严格。** IaC 扫描、许可证合规、严格出站拦截均为可选开关。
-
----
-
-## 特性
-
-### Layer 1 多语言构建与测试
-
-每个作业先做检测，再执行 lint / build / 单元测试 / 覆盖率；不相关的作业会在数秒内优雅退出。
-
-| 技术栈 | 检测条件 | Lint / Build | 测试 | 覆盖率产物 |
-|--------|----------|--------------|------|-----------|
-| Node.js / TypeScript | `package.json` | `npm ci` → `npm run lint` → `npm run build` | `npm test` | `coverage/` → Codecov |
-| Java Maven | `pom.xml` | `mvn verify` | 同上 | JaCoCo `target/site/jacoco/` |
-| Java Gradle | `build.gradle*` | `gradle check assemble` | 同上 | JaCoCo `build/reports/jacoco/` |
-| PHP / Laravel | `composer.json` 或任意 `*.php` | `composer install` → `php -l` | `composer test` / PHPUnit | 自定义 |
-| Python | `pyproject.toml` / `requirements.txt` / `setup.py` / `Pipfile` | Flake8 E9/F63/F7/F82 | `pytest --cov` | `coverage.xml` |
-| Go | `go.mod` | `go vet` → `go build` | `go test -race` | `coverage.out` |
-| .NET (C#, F#) | `*.csproj` / `*.sln` / `*.fsproj` | `dotnet restore` → `dotnet build -c Release` | `dotnet test` | Cobertura XML |
-| Docker | `Dockerfile` / `Dockerfile.*` | Hadolint（阈值 warning） | — | — |
-
-### 供应链安全
-
-| 工具 | 适用范围 | 产物 |
-|------|---------|------|
-| [step-security/harden-runner](https://github.com/step-security/harden-runner) | 每个 job 的运行时出站控制 | 审计或阻断出站流量 |
-| [CodeQL](https://codeql.github.com/) | `actions` 语言（适用于工作流模板本身） | Code Scanning |
-| [zizmor](https://zizmor.sh/) | GitHub Actions 静态分析 | SARIF |
-| [gitleaks](https://github.com/gitleaks/gitleaks) | 完整 git 历史密钥扫描 | PR 状态检查 |
-| [Trivy](https://trivy.dev/) | 文件系统漏洞 + 密钥扫描（已避开 2026 年 3 月的供应链攻击版本） | 默认 CRITICAL / HIGH 级别失败 |
-| [Checkov](https://www.checkov.io/) | IaC（Terraform / Kubernetes / Dockerfile / Secrets / Actions） | SARIF |
-| [REUSE](https://reuse.software/) | SPDX 许可证合规 | 可选 |
-| [OpenSSF Scorecard](https://scorecard.dev/) | 每周行业安全评分 | 徽章 + SARIF |
-
-### 开发者体验
-
-- 预配置 **Dependabot** 覆盖 9 个生态，每周合并为单个 PR，避免通知邮件轰炸。
-- **release-please** 基于 Conventional Commits 自动发版，并滑动维护 `v1` / `v2` 主版本标签。
-- **commitlint** 在 PR 标题强制使用 Conventional Commits。
-- 预置 `CODEOWNERS`、PR 模板、Issue 表单、`SECURITY.md`、`CONTRIBUTING.md`，开箱即治理。
-- `.gitattributes` 在 Windows / macOS / Linux 之间统一换行符处理。
-
----
-
-## 架构
-
-```mermaid
-flowchart TB
-    A([下游仓库<br/>push 或 pull_request]) --> B[你的 10 行 ci.yml]
-    B -->|uses: ...@v2| C[reusable-ci.yml]
-
-    C --> L0[Layer 0<br/>仓库卫生]
-    L0 --> L1{Layer 1 · 七语言并行}
-
-    L1 --> N[Node matrix]
-    L1 --> J[Java Maven+Gradle]
-    L1 --> P[PHP]
-    L1 --> Y[Python matrix]
-    L1 --> G[Go]
-    L1 --> D[.NET]
-    L1 --> K[Docker / Hadolint]
-
-    N & J & P & Y & G & D & K --> AGG[layer1-aggregate]
-
-    AGG --> L2{Layer 2 · 并行}
-    L2 --> T[Trivy<br/>漏洞 + 密钥]
-    L2 --> CH[Checkov<br/>IaC · 可选]
-    L2 --> R[REUSE<br/>许可证 · 可选]
-
-    AGG --> L3[Layer 3<br/>Codecov 上传]
-
-    style C fill:#e1f5e1,stroke:#2e7d32
-    style L3 fill:#fff4e1,stroke:#ef6c00
-```
-
-每个 job 的第一步都是 `step-security/harden-runner`。每一个 `uses:` 引用均固定到 commit SHA，可读的 tag 保留在行末注释，并由 Dependabot 每周自动维护。
-
----
-
 ## 快速开始
 
-### 第 1 步 — 添加工作流
-
-把 [`starter/.github/workflows/ci.yml`](./starter/.github/workflows/ci.yml) 原样复制到你的仓库相同路径：
-
-```yaml
-name: CI & Security Scan
-
-on:
-  push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
-  workflow_dispatch:
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-permissions:
-  contents: read
-
-jobs:
-  ci:
-    uses: 2029193370/ci-templates/.github/workflows/reusable-ci.yml@v2
-    # 所有输入均为可选，带合理默认值。
-    # with:
-    #   node-versions: '["20","22"]'
-    #   python-versions: '["3.11","3.12"]'
-    #   enable-checkov: true
-    # secrets:
-    #   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-```
-
-### 第 2 步 — Push 即生效
-
-提交并推送后，后续任何 push 或 PR 都会触发完整的三层流水线。你不使用的语言对应的 job 会在数秒内退出。
-
-### 第 3 步（可选）— 为你自己的依赖启用 Dependabot
-
-复制 [`starter/.github/dependabot.yml`](./starter/.github/dependabot.yml)，删除用不到的生态块即可。模板默认开启静音配置：每生态每周最多一个聚合 PR。
-
-> 你**无需**为工作流本身启用 Dependabot。`@v2` 滑动标签由本仓库维护，你的下一次 CI 运行会自动使用最新版本。
-
----
-
-## 支持的技术栈
-
-同一仓库可同时包含以下任意组合，检测结果决定哪些 job 执行：
-
-| 生态 | 默认版本 | 覆盖参数 |
-|------|----------|----------|
-| Node.js | 22 | `node-version` 或 `node-versions`（矩阵） |
-| Java | 17 LTS | `java-version` |
-| PHP | 8.2 | `php-version` |
-| Python | 3.11 | `python-version` 或 `python-versions`（矩阵） |
-| Go | 1.22 | `go-version` |
-| .NET | 8.0 | `dotnet-version` |
-| Docker | —（Hadolint） | — |
-
----
-
-## 配置
-
-### 输入参数
-
-所有参数均为可选。
-
-| 参数 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `node-version` | string | `'22'` | 单一 Node.js 版本。设置 `node-versions` 后被忽略。 |
-| `node-versions` | string | `''` | JSON 数组，用于矩阵测试，例如 `'["20","22"]'`。 |
-| `java-version` | string | `'17'` | Temurin LTS：`17` 或 `21`。 |
-| `php-version` | string | `'8.2'` | PHP 运行时版本。 |
-| `python-version` | string | `'3.11'` | 单一 Python 版本。 |
-| `python-versions` | string | `''` | JSON 数组，用于矩阵测试，例如 `'["3.11","3.12"]'`。 |
-| `go-version` | string | `'1.22'` | Go 工具链版本。 |
-| `dotnet-version` | string | `'8.0'` | .NET SDK 版本。 |
-| `trivy-severity` | string | `'CRITICAL,HIGH'` | Trivy 报告的严重级别，逗号分隔。 |
-| `trivy-exit-code` | string | `'1'` | `'1'` 表示发现问题即失败，`'0'` 表示仅报告。 |
-| `enable-checkov` | boolean | `true` | 在检测到 IaC 文件时运行 Checkov。 |
-| `enable-license-scan` | boolean | `false` | 运行 REUSE SPDX 许可证合规扫描。 |
-| `fail-fast-on-hygiene` | boolean | `false` | Layer 0 失败时阻塞 Layer 1 及以后。 |
-| `harden-runner-policy` | string | `'audit'` | `'audit'` 审计或 `'block'` 阻断出站。 |
-
-### 密钥
-
-| 密钥 | 用途 |
-|------|------|
-| `CODECOV_TOKEN` | 可选。设置后 Layer 3 将聚合覆盖率上传至 Codecov。 |
-
-### 多版本矩阵测试
-
-用 JSON 数组并行测试多个语言版本：
-
-```yaml
-with:
-  node-versions: '["18","20","22"]'
-  python-versions: '["3.10","3.11","3.12"]'
-```
-
-矩阵内的各个 job 并行执行，分别产出 `coverage-node-<version>` / `coverage-python-<version>` 工件，由 Layer 3 统一聚合。
-
----
-
-## 安全模型
-
-### 纵深防御
-
-```text
-┌──────────────────────────────────────────────────────────┐
-│ 准入门禁                                                 │
-│   commitlint · CODEOWNERS · 分支保护                     │
-├──────────────────────────────────────────────────────────┤
-│ 静态分析（每次 PR）                                      │
-│   CodeQL · zizmor · yamllint                             │
-├──────────────────────────────────────────────────────────┤
-│ 密钥检测（每次推送，完整 git 历史）                      │
-│   gitleaks · Trivy 密钥扫描                              │
-├──────────────────────────────────────────────────────────┤
-│ 运行时加固（每个 job）                                   │
-│   step-security/harden-runner 出站防火墙                 │
-├──────────────────────────────────────────────────────────┤
-│ 依赖卫生                                                 │
-│   SHA 固定 Actions · Dependabot · Trivy 漏洞扫描         │
-├──────────────────────────────────────────────────────────┤
-│ 持续评分                                                 │
-│   OpenSSF Scorecard（每周 SARIF）                        │
-└──────────────────────────────────────────────────────────┘
-```
-
-### SHA 固定
-
-本仓库中每一个第三方 Action 均被固定到 40 位完整 commit SHA，可读的 tag 作为行末注释保留：
-
-```yaml
-uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-```
-
-Dependabot 每周自动为所有新发布的 tag 开出一个合并 PR。这种做法可以防御"可变 tag 被重新指向恶意代码"这一类的供应链攻击。
-
-注意：[`starter/`](./starter/.github/workflows/ci.yml) 中的文件**故意**不做 SHA 固定 —— 下游用户需要能直接阅读与编辑它，无需人工解析 SHA。他们通过我们维护的滑动 `v2` 标签自动获得更新。
-
-### 最小权限
-
-每个工作流顶层声明 `permissions: contents: read`，必要时才在 job 级别细粒度赋权（例如 CodeQL、Scorecard 的 `security-events: write`）。
-
-### 漏洞上报
-
-请使用 GitHub 的私密安全公告流程，**不要**公开提交 Issue。详见 [`SECURITY.md`](./SECURITY.md)。
-
----
-
-## 版本与升级策略
-
-本项目遵循 [Semantic Versioning 2.0.0](https://semver.org/)。版本由 [release-please](https://github.com/googleapis/release-please) 根据 [Conventional Commits](https://www.conventionalcommits.org/) 自动驱动：
-
-- `feat(...)` 触发 minor（`v2.0.0` → `v2.1.0`）。
-- `fix(...)` / `perf(...)` 触发 patch（`v2.0.0` → `v2.0.1`）。
-- `feat!:` 或 `BREAKING CHANGE:` 触发 major（`v2.x.y` → `v3.0.0`）。
-
-| 下游 `uses:` 写法 | 自动升级 | 可复现度 | 适用场景 |
-|-------------------|----------|----------|----------|
-| `@v2`（滑动主版本） | 是，每次 CI 运行 | 中 | 一般项目（**默认**） |
-| `@v2.0.0`（精确 tag） | 否 | 高 | 合规 / 审计环境 |
-| `@<40 位 SHA>` | 否 | 最高 | 极端合规场景 |
-| `@main` | 是，非常激进 | 差 | 仅用于调试本仓库 |
-
-我们维护**当前主版本**与**上一主版本**的安全补丁。详见 [`SECURITY.md`](./SECURITY.md) 中的支持矩阵。
-
----
-
-## 升级如何传达到下游仓库
-
-```text
- ci-templates 仓库                        下游仓库
-─────────────────────                  ────────────────────
-                                       uses: ...@v2（无需改动）
- 1. 合并 "fix:" PR 到 main
- 2. release-please 开 Release PR
- 3. 你合并 Release PR
- 4. 自动：打 v2.0.1 tag、
-    发 GitHub Release、
-    强制移动 v2 → v2.0.1 ─────────►    下游下一次 CI：
-                                        GitHub 解析 @v2 →
-                                        取最新 commit SHA →
-                                        新 workflow 自动执行
-```
-
-下游仓库**不会收到 PR**，**不会收到邮件**。更新会在下游仓库下一次 push / PR / schedule 触发时自动生效。
-
-### 紧急回滚
-
-滑动标签是可回退的指针。若某次发布出现问题：
+### macOS / Linux / WSL / Git Bash
 
 ```bash
-git tag -f v2 v2.0.0          # 本地把 v2 指回已知正常的 commit
-git push -f origin v2         # 所有下游仓库在下一次 CI 时自动恢复正常
+curl -fsSL https://raw.githubusercontent.com/2029193370/skills/main/scripts/install.sh | bash
+```
+
+### Windows PowerShell
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/2029193370/skills/main/scripts/install.ps1 | iex
+```
+
+这条命令会自动做完四件事：
+
+1. 检测你机器上装过的 agent（Cursor / Claude Code / Codex / Windsurf）。
+2. 从上游仓库按子目录 sparse clone 要装的 skills（只下载实际需要的字节）。
+3. 把每个 skill 放进每一个检测到的 agent 的全局 skills 目录。
+4. 写一个小 manifest，`--uninstall` 能精确撤销。
+
+非交互式（适合 CI 或 dotfiles 脚本）：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/2029193370/skills/main/scripts/install.sh \
+  | bash -s -- --agent=cursor --skills=superpowers,find-skills --yes
 ```
 
 ---
 
-## 工作流清单
+## 内置 skills
 
-| 文件 | 触发 | 作用 |
-|------|------|------|
-| `.github/workflows/reusable-ci.yml` | `workflow_call` | 对外暴露的流水线 —— 本仓库的公共 API |
-| `.github/workflows/ci-lint.yml` | 影响工作流的 push / PR | 校验工作流 YAML 语法 |
-| `.github/workflows/codeql.yml` | push / PR / 每周 | CodeQL `actions` 语言分析 |
-| `.github/workflows/zizmor.yml` | push / PR / 每周 | GitHub Actions 静态安全分析 |
-| `.github/workflows/gitleaks.yml` | push / PR / 每周 | 完整 git 历史密钥扫描 |
-| `.github/workflows/scorecard.yml` | push / 每周 | OpenSSF Scorecard 评分 |
-| `.github/workflows/commitlint.yml` | PR | PR 标题 Conventional Commits 校验 |
-| `.github/workflows/release-please.yml` | push main | 自动发版 + 滑动主版本 tag |
-| `.github/dependabot.yml` | 每周 cron | 聚合式依赖更新 PR |
+所有条目都定义在 [`registry.json`](./registry.json)。自定义添加请见 [`docs/ADDING_A_SKILL.md`](./docs/ADDING_A_SKILL.md)。
+
+| Skill | 作用 | 上游 | License |
+| --- | --- | --- | --- |
+| `document-skills` | 读写 Excel / Word / PDF / PPT | [anthropics/skills](https://github.com/anthropics/skills) | Source-available |
+| `frontend-design` | 生产级前端界面设计 | [anthropics/skills](https://github.com/anthropics/skills) | Source-available |
+| `skill-creator` | 创建、评测、迭代你自己的 skills | [anthropics/skills](https://github.com/anthropics/skills) | Source-available |
+| `ui-ux-pro-max` | 57 套 UI 风格、95 种配色、56 组字体、98 条 UX 准则 | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | MIT |
+| `find-skills` | 当你问"有没有做 X 的 skill"时自动搜索与安装 | [aqianer/find-skills](https://github.com/aqianer/find-skills) | MIT |
+| `superpowers` | 30+ 元技能：头脑风暴 / 计划 / TDD / 子 agent 派发 | [obra/superpowers-skills](https://github.com/obra/superpowers-skills) | MIT |
+
+> **关于 License。** 三个 Anthropic 官方 skill 以 *source-available* 许可证发布，不允许二次分发。**本项目从不在自己的仓库里内置它们**：在线模式下你的机器直接从上游拉，这是许可证允许的。`--offline` 模式会跳过它们并提示，仅内置 3 个 MIT skill 作为离线镜像（见 [`skills/`](./skills/)）。
 
 ---
 
-## 常见问题
+## 支持的 agent
 
-### 我的项目会自动获得升级吗？
+| Agent | 如何检测 | 全局 skills 路径 | 项目 skills 路径 |
+| --- | --- | --- | --- |
+| Cursor | 存在 `~/.cursor/` | `~/.cursor/skills/` | `./.cursor/skills/` |
+| Claude Code | 存在 `~/.claude/`（或 `$CLAUDE_CONFIG_DIR`） | `~/.claude/skills/` | `./.claude/skills/` |
+| Codex CLI | 存在 `~/.codex/` | `~/.codex/skills/` | *（不支持项目级）* |
+| Windsurf | 存在 `~/.codeium/windsurf/` | `~/.codeium/windsurf/skills/` | `./.windsurf/skills/` |
 
-会，只要你写 `@v2`。每次我们发版后，你在下一次 CI 运行中自动使用新版本。**你的仓库不会收到任何 PR。**
+需要装到当前项目就加 `--scope=project`；想装到全局（默认）就直接跑。
 
-### 如何追求最大可复现性？
+---
 
-把 `@v2` 改为精确 tag（如 `@v2.0.0`）或 40 位 commit SHA。这样你会放弃自动更新。
+## 命令行参考
 
-### 我不用的语言 job 显示 skipped，是否有问题？
+```
+Usage: install.sh [选项]
 
-不是。Layer 1 的每个 job 先执行检测步骤，若未发现对应的配置文件会在一分钟内退出。
+动作：
+  --install                  （默认）
+  --uninstall                按 manifest 反向删除
+  --list                     预览会往哪里放什么，不写盘
 
-### `harden-runner` 的 `block` 模式把我 CI 搞挂了怎么办？
+选择：
+  --agent=<all|cursor|claude|codex|windsurf>    目标 agent，默认 all（仅安装已检测到的）
+  --scope=<global|project>                      作用域，默认 global
+  --skills=<all|name1,name2,...>                要装的 skill，默认 all
 
-先用 `harden-runner-policy: 'audit'` 模式跑几次，在 Actions 运行页面的 "Network Traffic" 洞察标签查看你合法的出站目标，加到白名单后再切 `'block'`。任何时候都可以退回 `'audit'`。
+模式：
+  --offline                  走内置 MIT 镜像，不联网；Anthropic 的 3 个会被跳过
+  --force                    已有同名目录也覆盖，不问
+  --dry-run                  只打印将会做什么，不写盘
+  --yes, -y                  所有提示默认 yes（CI / 管道安全）
 
-### 如何启用覆盖率上传？
-
-在仓库 Secrets 里配置 `CODECOV_TOKEN`，并透传：
-
-```yaml
-secrets:
-  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+环境变量：
+  SKILLS_INSTALLER_REPO    默认 2029193370/skills
+  SKILLS_INSTALLER_REF     默认 main（分支 / tag / 提交 SHA）
 ```
 
-### Monorepo 怎么办？
+PowerShell 使用 PascalCase 同名参数：`-Agent`、`-Scope`、`-Skills`、`-Offline`、`-Force`、`-DryRun`、`-Yes`、`-Action`。
 
-当前模板以仓库根目录为入口。Monorepo 通常需要自定义调用方工作流，按 package/workspace 分别调用可复用工作流。欢迎提 PR 增加一等公民的 Monorepo 支持。
+### 例子
 
-### 可以 Fork 并自己托管吗？
+```bash
+# 预览，什么都不写
+curl -fsSL .../install.sh | bash -s -- --list
 
-当然可以。本项目采用 MIT 许可，可商用。如果 Fork，请把 `starter/` 里的 `uses:` 改指向你的 Fork，并更新徽章 URL。
+# 只装 2 个 skill 到 Cursor 全局
+curl -fsSL .../install.sh | bash -s -- --agent=cursor --skills=superpowers,find-skills
 
-### `release-please` 为什么没开 Release PR？
+# 装到当前项目（monorepo 场景）
+curl -fsSL .../install.sh | bash -s -- --scope=project
 
-它只识别 Conventional Commits。若你的 squash commit 标题是 `Merge pull request #42`，它不会被识别。请把仓库 squash 合并默认改为使用 PR 标题，并确保 PR 标题通过 `commitlint`。
+# 离线 + pin 到 release tag
+SKILLS_INSTALLER_REF=v1.0.0 \
+  curl -fsSL .../install.sh | bash -s -- --offline
 
-### 为什么 REUSE 许可证扫描默认关闭？
-
-REUSE 要求每个源文件都带 SPDX 头部，多数项目无法立即满足。当团队准备好后，用 `enable-license-scan: true` 开启。
-
----
-
-## 版本迁移
-
-### 从 v1.x 升级到 v2.x
-
-- 把 `uses: ...@v1` 改为 `uses: ...@v2`。
-- 输入参数全部采用 kebab-case（旧版本混用）。重命名：`trivy_exit_code` → `trivy-exit-code`。
-- Layer 1 现在运行测试并产出名为 `coverage-<stack>-<version>` 的覆盖率工件；旧的 `coverage-report` 名称已废弃。
-- `harden-runner-policy` 建议先用 `'audit'`，待白名单稳定后改 `'block'`。
-- Node / Python 现在支持矩阵输入；若未使用矩阵，默认行为保持不变。
+# 全部卸载
+curl -fsSL .../install.sh | bash -s -- --uninstall --agent=all
+```
 
 ---
 
-## 贡献指南
+## 工作流程
 
-欢迎提交 PR、Bug 报告和功能建议。请先阅读 [`CONTRIBUTING.md`](./CONTRIBUTING.md)。所有贡献者需遵守项目行为准则（Contributor Covenant 2.1，见 `CONTRIBUTING.md`）。
+```mermaid
+flowchart TD
+    A([curl install.sh pipe bash]) --> B[解析参数或 TTY 交互式询问]
+    B --> C[检测 Cursor Claude Codex Windsurf 目录]
+    C --> D{offline?}
+    D -->|否 默认| E[对每个上游仓库 sparse clone 到临时目录]
+    D -->|是| F[下载本仓库 tarball 读 skills 镜像]
+    E --> G[逐个复制 skill 到对应 agent 的 skills 目录]
+    F --> G
+    G --> H[写 .skills-installer.json manifest]
+    H --> I([打印总结])
+```
 
-提交 PR 前建议：
-
-1. 本地运行 `yamllint -c .yamllint .github/workflows starter/.github/workflows .github/dependabot.yml`。
-2. 可选运行 `zizmor .github/workflows`。
-3. commit / PR 标题遵循 Conventional Commits —— `commitlint` 会在每个 PR 上强制校验。
+每个 skill 都走 `git clone --depth 1 --filter=blob:none --sparse` + `git sparse-checkout set <paths>` 来抓取，遇到 `anthropics/skills` 这样的大 monorepo 也只下载你真正要装的那个子目录。
 
 ---
 
-## 安全策略
+## FAQ
 
-详见 [`SECURITY.md`](./SECURITY.md)。漏洞请通过 [GitHub 私密安全公告](https://github.com/2029193370/ci-templates/security/advisories/new) 私下上报 —— **请勿公开提交 Issue**。
+### 为什么 `--offline` 会跳过一半的 skill？
+
+Anthropic 的三个 skill（`document-skills` / `frontend-design` / `skill-creator`）是 *source-available*，不允许再分发。把它们塞进本仓库就构成了再分发。默认在线模式下你的机器直接从上游拉一份给自己用，这是合法的。MIT 许可证的另外 3 个则可以被镜像到 [`skills/`](./skills/) 供离线使用。
+
+### 想加自己的 skill 怎么办？
+
+给 [`registry.json`](./registry.json) 加一条即可。schema 见 [`registry.schema.json`](./registry.schema.json)、[`docs/ADDING_A_SKILL.md`](./docs/ADDING_A_SKILL.md)。如果你的 skill 是 MIT / Apache / BSD 许可证，希望它支持 `--offline`，把 `redistributable` 设为 `true`，下一次 `scripts/sync-upstream.sh` 会把它拉到镜像。
+
+### 怎么升级已安装的 skill？
+
+重跑一键命令加 `--force`，会用上游最新版覆盖本地。如果想要确定性升级，pin 到 `SKILLS_INSTALLER_REF=vX.Y.Z`。
+
+### 安装到底放了哪些东西？
+
+每个 agent 的 skills 目录下会有 `.skills-installer.json`，里面列出了安装过的每条路径和当时的 ref。`--uninstall` 就是读这个 manifest 精确删除的。
+
+### 必须联网吗？
+
+不必。`--offline` 会下载本仓库的 tarball（约 300 KB），把里面的 MIT skill 镜像拷给你。Anthropic 的三个会被跳过，提示你联网重跑。
+
+### 想 pin 到具体版本？
+
+```bash
+SKILLS_INSTALLER_REF=v1.0.0 curl -fsSL \
+  https://raw.githubusercontent.com/2029193370/skills/v1.0.0/scripts/install.sh | bash
+```
+
+代码和 registry 都会在该 ref 解析，行为完全可复现。
+
+### `curl | bash` 安全吗？
+
+脚本本身很小，跑之前可以读：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/2029193370/skills/main/scripts/install.sh | less
+```
+
+脚本只往已检测到的 agent skills 目录写文件、再加一个 manifest；不改 PATH、不动 shell rc、不写注册表、不装二进制。
+
+---
+
+## 安全
+
+- 没有埋点、没有 analytics、没有后台进程。
+- 本仓库 CI 使用的每个 GitHub Action 都 SHA-pin，Dependabot 自动保持新。
+- 安装器的所有写操作都在已检测到的 agent skills 目录内，加一个 manifest 文件。
+- 私密漏洞报告走 GitHub Security Advisories，见 [`SECURITY.md`](./SECURITY.md)。
+
+---
+
+## 贡献
+
+欢迎 PR：新增 skill 到 `registry.json`、增加 agent 目标、翻译文档。先看 [`CONTRIBUTING.md`](./CONTRIBUTING.md)。PR 标题必须是 [Conventional Commits](https://www.conventionalcommits.org/) 格式，release notes 从中自动生成。
 
 ---
 
 ## 贡献者
 
-感谢所有开过 Issue、提交过代码或协助 Review 的朋友。
-
-<a href="https://github.com/2029193370/ci-templates/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=2029193370/ci-templates" alt="ci-templates 贡献者" />
+<a href="https://github.com/2029193370/skills/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=2029193370/skills" alt="skills contributors" />
 </a>
 
-_图像由 [contrib.rocks](https://contrib.rocks) 自动生成。_
+_图片由 [contrib.rocks](https://contrib.rocks) 生成。_
 
 ---
 
-## Star 历史
+## Star History
 
-<a href="https://star-history.com/#2029193370/ci-templates&Date">
+<a href="https://star-history.com/#2029193370/skills&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=2029193370/ci-templates&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=2029193370/ci-templates&type=Date" />
-    <img alt="Star 历史趋势" src="https://api.star-history.com/svg?repos=2029193370/ci-templates&type=Date" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=2029193370/skills&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=2029193370/skills&type=Date" />
+    <img alt="Star history chart" src="https://api.star-history.com/svg?repos=2029193370/skills&type=Date" />
   </picture>
 </a>
 
 ---
 
-## 许可协议
+## License
 
-采用 [MIT 许可协议](./LICENSE)。你可自由使用、修改、Fork、托管与商业分发本模板，无需强制署名。
+本仓库以 [MIT](./LICENSE) 发布。被安装的 skills 保留其**各自的** license，详见上表上游链接。
 
 ---
 
 ## 致谢
 
-`ci-templates` 站在以下开源项目的肩膀上：
-
-- [step-security/harden-runner](https://github.com/step-security/harden-runner) —— 运行时出站管控
-- [aquasecurity/trivy](https://trivy.dev/) —— 漏洞与密钥扫描
-- [zizmorcore/zizmor](https://zizmor.sh/) —— GitHub Actions 静态分析
-- [gitleaks/gitleaks](https://github.com/gitleaks/gitleaks) —— 密钥检测
-- [ossf/scorecard](https://scorecard.dev/) —— OpenSSF 安全评分
-- [bridgecrewio/checkov](https://www.checkov.io/) —— IaC 扫描
-- [fsfe/reuse-action](https://github.com/fsfe/reuse-action) —— SPDX 许可证合规
-- [googleapis/release-please](https://github.com/googleapis/release-please) —— 发版自动化
-- [github/codeql-action](https://codeql.github.com/) —— 静态分析
-
-感谢所有为 GitHub Actions 生态贡献工具的维护者。
+- [anthropics/skills](https://github.com/anthropics/skills) — `document-skills` / `frontend-design` / `skill-creator` 的上游。
+- [obra/superpowers-skills](https://github.com/obra/superpowers-skills) — agentic 软件开发方法论。
+- [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) — UI/UX 设计智能 skill。
+- [aqianer/find-skills](https://github.com/aqianer/find-skills) — skill 发现工具。
