@@ -113,16 +113,56 @@ parse_args() {
 # ---------- dependency checks ------------------------------------------------
 need_cmd() { command -v "$1" >/dev/null 2>&1 || { err "missing dependency: $1"; return 1; }; }
 
+# Resolved absolute path of a working Python 3 interpreter. Set by check_deps.
+PY_BIN=""
+
+# Try to resolve a Python interpreter that actually runs (not a Windows Store
+# "python3.exe" app-execution alias, which is on PATH but exits non-zero and
+# launches the Store instead of executing the script).
+resolve_python() {
+  local candidates=() c full
+  for c in python3 python py; do
+    command -v "$c" >/dev/null 2>&1 || continue
+    # Skip the Microsoft Store app-execution alias; it appears on PATH but
+    # returns ~49 on any invocation. Detect by its canonical location.
+    full="$(command -v "$c" 2>/dev/null || true)"
+    case "$full" in
+      */WindowsApps/python*|*/WindowsApps/py*) continue ;;
+    esac
+    candidates+=("$c")
+  done
+
+  for c in "${candidates[@]}"; do
+    # py.exe needs -3 to force Python 3.
+    if [ "$c" = "py" ]; then
+      if py -3 -c 'import sys; sys.exit(0 if sys.version_info[0] >= 3 else 1)' >/dev/null 2>&1; then
+        PY_BIN="py -3"
+        return 0
+      fi
+      continue
+    fi
+    if "$c" -c 'import sys; sys.exit(0 if sys.version_info[0] >= 3 else 1)' >/dev/null 2>&1; then
+      PY_BIN="$c"
+      return 0
+    fi
+  done
+  return 1
+}
+
 check_deps() {
   local miss=0
   for c in git curl; do need_cmd "$c" || miss=1; done
-  command -v python3 >/dev/null 2>&1 || command -v python >/dev/null 2>&1 || {
-    err "need python3 (or python) on PATH for JSON parsing"; miss=1; }
+  if ! resolve_python; then
+    err "need a working python3 (or python) on PATH for JSON parsing"
+    err "hint: on Windows, install Python from python.org — the \"python3\" on PATH may be a Microsoft Store stub that does not execute"
+    miss=1
+  fi
   [ "$miss" -eq 0 ] || exit 1
 }
 
 py() {
-  if command -v python3 >/dev/null 2>&1; then python3 "$@"; else python "$@"; fi
+  # shellcheck disable=SC2086 # PY_BIN may be "py -3"
+  $PY_BIN "$@"
 }
 
 # ---------- agent detection --------------------------------------------------
@@ -252,13 +292,24 @@ fetch_upstream_tree() {
   echo "$wd"
 }
 
+# Run skill_fields and eval its output, or return 1 on any failure.
+# Separated out because `eval "$(skill_fields NAME)" || ...` is broken: a
+# command substitution that produces no output always evals to empty-string
+# and exits 0, which then lets downstream `set -u` code blow up on unbound
+# SK_* variables instead of surfacing the real error.
+load_skill_fields() {
+  local name="$1" spec
+  spec="$(skill_fields "$name")" || { err "skill '$name' not in registry"; return 1; }
+  [ -n "$spec" ] || { err "skill '$name' produced empty metadata (python failure?)"; return 1; }
+  eval "$spec"
+}
+
 resolve_source_dir() {
   # For online mode: git sparse clone upstream into tmp, return tmp path.
   # For offline mode: return the mirror dir under MIRROR_ROOT/skills/<name>.
   # Prints path (one line) on success, fails on error.
   local name="$1"
-  # shellcheck disable=SC2155
-  eval "$(skill_fields "$name")" || { err "skill '$name' not in registry"; return 1; }
+  load_skill_fields "$name" || return 1
   if [ "$OFFLINE" -eq 1 ]; then
     if [ "$SK_REDIST" != "1" ]; then
       warn "skill '$name' is not redistributable under --offline (license: $SK_LICENSE); skipping"
@@ -278,7 +329,7 @@ resolve_source_dir() {
 install_one() {
   # $1=agent $2=skill_name
   local agent="$1" name="$2"
-  eval "$(skill_fields "$name")"
+  load_skill_fields "$name" || return 1
 
   local dir; dir="$(agent_dir "$agent" "$SCOPE")" || { err "unknown agent/scope: $agent/$SCOPE"; return 1; }
   local src; src="$(resolve_source_dir "$name")" || {
