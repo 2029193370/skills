@@ -4,7 +4,7 @@
 
 **One command. All your agent skills. Every IDE.**
 
-Install the six most useful agent skills — `document-skills`, `frontend-design`, `skill-creator`, `ui-ux-pro-max`, `find-skills`, `superpowers` — globally into Cursor, Claude Code, Codex CLI and Windsurf, with a single line of shell.
+Install the eleven most useful agent skills — from document processing and frontend design to SDLC workflows, memory persistence, knowledge graphs, and expert team roles — globally into Cursor, Claude Code, Codex CLI and Windsurf, with a single line of shell.
 
 <br />
 
@@ -41,7 +41,7 @@ iwr -useb https://raw.githubusercontent.com/2029193370/skills/main/scripts/insta
 That is literally all. The installer will:
 
 1. Detect which of Cursor / Claude Code / Codex / Windsurf you have installed.
-2. Fetch the six skills from upstream (sparse clone — only the bytes you need).
+2. Fetch the eleven skills from upstream (sparse clone — only the bytes you need).
 3. Drop each one into the right global skills directory for every detected agent.
 4. Write a tiny manifest so `--uninstall` can undo it later.
 
@@ -163,7 +163,7 @@ For each skill, the tool performs a `git clone --depth 1 --filter=blob:none --sp
 
 ### Why does `--offline` skip half the skills?
 
-The three Anthropic skills (`document-skills`, `frontend-design`, `skill-creator`) ship under a source-available license that does not grant redistribution rights. Bundling them here would make **this** repository a redistribution, which is exactly what their license forbids. `--online` (the default) lets your own machine fetch them directly from upstream, which is always legal for personal use. Skills that carry an MIT license are mirrored under [`skills/`](./skills/) and therefore work offline.
+The four source-available / unknown-license skills (`document-skills`, `frontend-design`, `skill-creator`, `graphify`) ship under licenses that do not grant redistribution rights. Bundling them here would make **this** repository a redistribution, which is exactly what their license forbids. `--online` (the default) lets your own machine fetch them directly from upstream, which is always legal for personal use. Skills that carry an MIT / Apache license are mirrored under [`skills/`](./skills/) and therefore work offline.
 
 ### I want to add my own skill to the installer
 
@@ -179,7 +179,7 @@ After a successful run look at `<agent skills dir>/.skills-installer.json`. It l
 
 ### Does this work offline?
 
-Yes, with caveats. Pass `--offline` and the installer downloads one tarball of this repo (~300 KB), extracts the MIT skills and copies them in. The three Anthropic skills are skipped — re-run online when you can.
+Yes, with caveats. Pass `--offline` and the installer downloads one tarball of this repo (~300 KB), extracts the MIT/Apache skills and copies them in. The four non-redistributable skills are skipped — re-run online when you can.
 
 ### Can I pin to a specific release?
 

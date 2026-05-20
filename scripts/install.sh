@@ -162,7 +162,10 @@ check_deps() {
 
 py() {
   # shellcheck disable=SC2086 # PY_BIN may be "py -3"
-  $PY_BIN "$@"
+  # Strip CR from stdout: on Windows, Python's print() emits CRLF line
+  # endings. Bash's $() / read strips only \n, leaving a trailing \r that
+  # breaks skill name matching and eval-based variable assignment.
+  $PY_BIN "$@" | tr -d '\r'
 }
 
 # ---------- agent detection --------------------------------------------------
@@ -217,6 +220,8 @@ fetch_registry() {
     # codeload extracts to <name>-<ref>/
     MIRROR_ROOT="$(find "$TMP_ROOT" -maxdepth 1 -mindepth 1 -type d | head -n1)"
     cp "$MIRROR_ROOT/registry.json" "$REGISTRY_FILE"
+    # Defensively strip CR in case platform tar or filesystem added CRLF
+    tr -d '\r' < "$REGISTRY_FILE" > "${REGISTRY_FILE}.tmp" && mv "${REGISTRY_FILE}.tmp" "$REGISTRY_FILE"
   else
     info "fetching registry from $BASE_URL/registry.json"
     curl -fsSL "$BASE_URL/registry.json" -o "$REGISTRY_FILE"
@@ -498,6 +503,8 @@ PY
 
 # ---------- interactive TUI (only when no selection flags passed) ------------
 maybe_prompt_selection() {
+  # Skip interactive prompts when --yes / non-interactive mode is requested
+  [ "$NON_INTERACTIVE" -eq 0 ] || return 0
   [ -t 0 ] && [ -t 1 ] || return 0
   [ "$AGENT" = "all" ] && [ "$SCOPE" = "global" ] && [ "$SKILLS_SEL" = "all" ] || return 0
 

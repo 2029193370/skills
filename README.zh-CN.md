@@ -2,7 +2,7 @@
 
 # skills-installer
 
-**一条命令，一次到位，把 6 个主流 agent skills 全局安装到 Cursor / Claude Code / Codex / Windsurf。**
+**一条命令，一次到位，把 11 个主流 agent skills 全局安装到 Cursor / Claude Code / Codex / Windsurf。**
 
 <br />
 
@@ -69,7 +69,7 @@ curl -fsSL https://raw.githubusercontent.com/2029193370/skills/main/scripts/inst
 | `gstack` | YC CEO Garry Tan 的 52 个专家角色 + 斜杠命令 | [garrytan/gstack](https://github.com/garrytan/gstack) | MIT |
 | `graphify` | 把代码/SQL/文档/图片转成可查询知识图谱 | [safishamsi/graphify](https://github.com/safishamsi/graphify) | Unknown |
 
-> **关于 License。** 四个 skill 以 *source-available* 或未知许可证发布，不允许二次分发（`document-skills`、`frontend-design`、`skill-creator`、`graphify`）。**本项目从不在自己的仓库里内置它们**：在线模式下你的机器直接从上游拉，这是许可证允许的。`--offline` 模式会跳过它们并提示，仅内置 7 个 MIT/Apache skill 作为离线镜像（见 [`skills/`](./skills/)）。
+> **关于 License。** 四个 skill（`document-skills`、`frontend-design`、`skill-creator`、`graphify`）以 *source-available* 或未知许可证发布，不允许二次分发。把它们塞进本仓库就构成了再分发。默认在线模式下你的机器直接从上游拉一份给自己用，这是合法的。MIT/Apache 许可证的另外 7 个则可以被镜像到 [`skills/`](./skills/) 供离线使用。
 
 ---
 
@@ -102,7 +102,7 @@ Usage: install.sh [选项]
   --skills=<all|name1,name2,...>                要装的 skill，默认 all
 
 模式：
-  --offline                  走内置 MIT 镜像，不联网；Anthropic 的 3 个会被跳过
+  --offline                  走内置 MIT/Apache 镜像，不联网；4 个不可分发 skill 会被跳过
   --force                    已有同名目录也覆盖，不问
   --dry-run                  只打印将会做什么，不写盘
   --yes, -y                  所有提示默认 yes（CI / 管道安全）
@@ -159,7 +159,7 @@ flowchart TD
 
 ### 为什么 `--offline` 会跳过一半的 skill？
 
-Anthropic 的三个 skill（`document-skills` / `frontend-design` / `skill-creator`）是 *source-available*，不允许再分发。把它们塞进本仓库就构成了再分发。默认在线模式下你的机器直接从上游拉一份给自己用，这是合法的。MIT 许可证的另外 3 个则可以被镜像到 [`skills/`](./skills/) 供离线使用。
+四个 skill（`document-skills` / `frontend-design` / `skill-creator` / `graphify`）是 *source-available* 或未知许可证，不允许再分发。把它们塞进本仓库就构成了再分发。默认在线模式下你的机器直接从上游拉一份给自己用，这是合法的。MIT/Apache 许可证的另外 7 个则可以被镜像到 [`skills/`](./skills/) 供离线使用。
 
 ### 想加自己的 skill 怎么办？
 
@@ -175,7 +175,7 @@ Anthropic 的三个 skill（`document-skills` / `frontend-design` / `skill-creat
 
 ### 必须联网吗？
 
-不必。`--offline` 会下载本仓库的 tarball（约 300 KB），把里面的 MIT skill 镜像拷给你。Anthropic 的三个会被跳过，提示你联网重跑。
+不必。`--offline` 会下载本仓库的 tarball（约 300 KB），把里面的 MIT/Apache skill 镜像拷给你。四个不可分发的会被跳过，提示你联网重跑。
 
 ### 想 pin 到具体版本？
 

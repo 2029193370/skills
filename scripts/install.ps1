@@ -406,6 +406,8 @@ function Invoke-Uninstall {
 
 # ----- interactive TUI (only when no selection flags used) ------------------
 function Maybe-Prompt {
+  # Skip interactive prompts when -Yes / non-interactive mode is requested
+  if ($Yes) { return }
   if (-not [Environment]::UserInteractive) { return }
   if ($Agent -ne 'all' -or $Scope -ne 'global' -or $Skills -ne 'all') { return }
   if ($Action -ne 'install') { return }
