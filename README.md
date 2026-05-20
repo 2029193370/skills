@@ -66,8 +66,13 @@ Everything in [`registry.json`](./registry.json). To add your own, see [`docs/AD
 | `ui-ux-pro-max` | 57 UI styles, 95 palettes, 56 font pairings, 98 UX guidelines | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | MIT |
 | `find-skills` | Discover and install more skills when you say "is there a skill for X?" | [aqianer/find-skills](https://github.com/aqianer/find-skills) | MIT |
 | `superpowers` | 30+ meta-skills — brainstorming, planning, TDD, subagent dispatch | [obra/superpowers-skills](https://github.com/obra/superpowers-skills) | MIT |
+| `andrej-karpathy-skills` | 4 principles to fix LLM coding mistakes: Think First, Keep Simple, Edit Surgical, Goal-Driven | [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) | MIT |
+| `agent-skills` | 23 production-grade engineering skills covering full SDLC: spec → plan → build → verify → review → ship | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | MIT |
+| `caveman` | Ultra-compressed caveman mode — cuts ~75% token usage | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | MIT |
+| `gstack` | YC CEO Garry Tan's 52 expert agent roles + slash commands | [garrytan/gstack](https://github.com/garrytan/gstack) | MIT |
+| `graphify` | Turn code, SQL, docs, images into queryable knowledge graphs | [safishamsi/graphify](https://github.com/safishamsi/graphify) | Unknown |
 
-> **License note.** The three Anthropic skills are source-available, not open source. In the default online mode the installer fetches them directly from upstream — this project never redistributes their content. Under `--offline` they are skipped with a clear warning; only the three MIT-licensed skills are bundled as an offline mirror under [`skills/`](./skills/).
+> **License note.** Four skills (`document-skills`, `frontend-design`, `skill-creator`, `graphify`) are source-available or unknown license — not redistributable. In the default online mode the installer fetches them directly from upstream — this project never redistributes their content. Under `--offline` they are skipped with a clear warning; only the 7 MIT/Apache-licensed skills are bundled as an offline mirror under [`skills/`](./skills/).
 
 ---
 

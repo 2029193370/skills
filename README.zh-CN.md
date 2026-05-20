@@ -63,8 +63,13 @@ curl -fsSL https://raw.githubusercontent.com/2029193370/skills/main/scripts/inst
 | `ui-ux-pro-max` | 57 套 UI 风格、95 种配色、56 组字体、98 条 UX 准则 | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | MIT |
 | `find-skills` | 当你问"有没有做 X 的 skill"时自动搜索与安装 | [aqianer/find-skills](https://github.com/aqianer/find-skills) | MIT |
 | `superpowers` | 30+ 元技能：头脑风暴 / 计划 / TDD / 子 agent 派发 | [obra/superpowers-skills](https://github.com/obra/superpowers-skills) | MIT |
+| `andrej-karpathy-skills` | 4 条原则根治 LLM 编码坏习惯：先想再写、简洁第一、精准改动、目标驱动 | [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) | MIT |
+| `agent-skills` | 23 个生产级工程 skill：spec → plan → build → verify → review → ship 全流程 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | MIT |
+| `caveman` | 原始人说话法，节省 ~75% token 消耗 | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | MIT |
+| `gstack` | YC CEO Garry Tan 的 52 个专家角色 + 斜杠命令 | [garrytan/gstack](https://github.com/garrytan/gstack) | MIT |
+| `graphify` | 把代码/SQL/文档/图片转成可查询知识图谱 | [safishamsi/graphify](https://github.com/safishamsi/graphify) | Unknown |
 
-> **关于 License。** 三个 Anthropic 官方 skill 以 *source-available* 许可证发布，不允许二次分发。**本项目从不在自己的仓库里内置它们**：在线模式下你的机器直接从上游拉，这是许可证允许的。`--offline` 模式会跳过它们并提示，仅内置 3 个 MIT skill 作为离线镜像（见 [`skills/`](./skills/)）。
+> **关于 License。** 四个 skill 以 *source-available* 或未知许可证发布，不允许二次分发（`document-skills`、`frontend-design`、`skill-creator`、`graphify`）。**本项目从不在自己的仓库里内置它们**：在线模式下你的机器直接从上游拉，这是许可证允许的。`--offline` 模式会跳过它们并提示，仅内置 7 个 MIT/Apache skill 作为离线镜像（见 [`skills/`](./skills/)）。
 
 ---
 

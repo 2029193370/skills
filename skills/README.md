@@ -5,19 +5,24 @@ This directory is the MIT-licensed subset of `registry.json` that
 [scripts/sync-upstream.sh](../scripts/sync-upstream.sh) before every
 release.
 
-| Skill           | Upstream                                                      | License |
-| --------------- | ------------------------------------------------------------- | ------- |
-| `find-skills`   | https://github.com/aqianer/find-skills                        | MIT     |
-| `superpowers`   | https://github.com/obra/superpowers-skills                    | MIT     |
-| `ui-ux-pro-max` | https://github.com/nextlevelbuilder/ui-ux-pro-max-skill       | MIT     |
+| Skill                     | Upstream                                                      | License     |
+| ------------------------- | ------------------------------------------------------------- | ----------- |
+| `find-skills`             | https://github.com/aqianer/find-skills                        | MIT         |
+| `superpowers`             | https://github.com/obra/superpowers-skills                    | MIT         |
+| `ui-ux-pro-max`           | https://github.com/nextlevelbuilder/ui-ux-pro-max-skill       | MIT         |
+| `andrej-karpathy-skills`  | https://github.com/multica-ai/andrej-karpathy-skills          | MIT         |
+| `agent-skills`            | https://github.com/addyosmani/agent-skills                    | MIT         |
+| `caveman`                 | https://github.com/JuliusBrussee/caveman                      | MIT         |
+| `gstack`                  | https://github.com/garrytan/gstack                            | MIT         |
 
-Three other entries in `registry.json` (`document-skills`,
-`frontend-design`, `skill-creator`) come from
-[anthropics/skills](https://github.com/anthropics/skills), whose
-license is **source-available, not open source**. They are
-deliberately **not mirrored** here: the installer fetches them
-directly from upstream in online mode, which is the default. If you
-run with `--offline`, those three are skipped with a clear message.
+Four other entries in `registry.json` (`document-skills`,
+`frontend-design`, `skill-creator`, `graphify`) come from
+[anthropics/skills](https://github.com/anthropics/skills) (Source-available)
+and [safishamsi/graphify](https://github.com/safishamsi/graphify) (Unknown),
+whose licenses do not permit redistribution. They are deliberately
+**not mirrored** here: the installer fetches them directly from upstream
+in online mode, which is the default. If you run with `--offline`, those
+four are skipped with a clear message.
 
 Do not hand-edit files under this directory: any local change will be
 overwritten on the next `scripts/sync-upstream.sh` run.

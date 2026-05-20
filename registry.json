@@ -74,6 +74,63 @@
       "paths": ["skills"],
       "flatten": true,
       "tags": ["methodology", "framework"]
+    },
+    {
+      "name": "andrej-karpathy-skills",
+      "title": "Andrej Karpathy Coding Guidelines",
+      "description": "4 principles to reduce LLM coding mistakes: Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution. Derived from Andrej Karpathy's observations.",
+      "upstream": "https://github.com/multica-ai/andrej-karpathy-skills",
+      "branch": "main",
+      "license": "MIT",
+      "redistributable": true,
+      "paths": ["skills/karpathy-guidelines"],
+      "tags": ["coding", "best-practices", "karpathy"]
+    },
+    {
+      "name": "agent-skills",
+      "title": "Addy Osmani's Agent Skills (23 Skills Pack)",
+      "description": "Production-grade engineering skills covering full SDLC: spec, plan, build, verify, review, ship. 23 structured workflows with verification gates. Google engineering practices built-in.",
+      "upstream": "https://github.com/addyosmani/agent-skills",
+      "branch": "main",
+      "license": "MIT",
+      "redistributable": true,
+      "paths": ["skills"],
+      "flatten": true,
+      "tags": ["engineering", "sdlc", "workflow", "google"]
+    },
+    {
+      "name": "caveman",
+      "title": "Caveman — Token Saver",
+      "description": "Ultra-compressed communication mode. Cuts ~75% of tokens while keeping full technical accuracy by speaking like a caveman.",
+      "upstream": "https://github.com/JuliusBrussee/caveman",
+      "branch": "main",
+      "license": "MIT",
+      "redistributable": true,
+      "paths": ["skills/caveman"],
+      "tags": ["efficiency", "token-saving"]
+    },
+    {
+      "name": "gstack",
+      "title": "Garry Tan's gstack (52 Expert Roles)",
+      "description": "YC CEO Garry Tan's AI-powered virtual engineering team: CEO, Designer, Eng Manager, QA, Security, Release Manager, and 47 more. 52 slash commands for every phase of building.",
+      "upstream": "https://github.com/garrytan/gstack",
+      "branch": "main",
+      "license": "MIT",
+      "redistributable": true,
+      "paths": ["."],
+      "installAs": "gstack",
+      "tags": ["engineering", "productivity", "team", "yc"]
+    },
+    {
+      "name": "graphify",
+      "title": "Graphify — Code Knowledge Graph",
+      "description": "Turn any folder of code, SQL schemas, docs, papers, images, or videos into a queryable knowledge graph. App code + database schema + infrastructure in one graph.",
+      "upstream": "https://github.com/safishamsi/graphify",
+      "branch": "v1",
+      "license": "Unknown",
+      "redistributable": false,
+      "paths": ["skills/graphify"],
+      "tags": ["knowledge-graph", "analysis", "visualization"]
     }
   ]
 }
